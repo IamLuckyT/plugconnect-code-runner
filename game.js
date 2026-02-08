@@ -88,6 +88,10 @@ function update() {
   }
 }
 
+// DRAW
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
 // PLAYER SPRITE
 ctx.drawImage(
   playerImg,
@@ -109,7 +113,7 @@ ctx.drawImage(
   bug.width,
   bug.height
 );
-
+}
 
   // Score
   ctx.fillStyle = "white";
