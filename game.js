@@ -1,6 +1,13 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+//PLAYER AND BUG IMAGES
+const playerImg = new Image();
+playerImg.src = "assets/player.png";
+
+const bugImg = new Image();
+bugImg.src = "assets/bug.png";
+
 // GAME STATE
 let gameSpeed = 4;
 let gravity = 0.5;
@@ -11,11 +18,18 @@ let gameOver = false;
 const player = {
   x: 50,
   y: 300,
-  width: 60,
-  height: 60,
+  width: 64,
+  height: 64,
+
+  frameX: 0,
+  maxFrames: 4,
+  frameTimer: 0,
+  frameInterval: 8,
+
   velocityY: 0,
   jumping: false
 };
+
 
 // BUG (OBSTACLE)
 const bug = {
@@ -39,6 +53,13 @@ function jump() {
 // UPDATE
 function update() {
   if (gameOver) return;
+
+  // Animate player
+  player.frameTimer++;
+  if (player.frameTimer >= player.frameInterval) {
+    player.frameX = (player.frameX + 1) % player.maxFrames;
+    player.frameTimer = 0;
+  }
 
   // Player physics
   player.velocityY += gravity;
@@ -67,17 +88,28 @@ function update() {
   }
 }
 
-// DRAW
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// PLAYER SPRITE
+ctx.drawImage(
+  playerImg,
+  player.frameX * player.width, // source X
+  0,                             // source Y
+  player.width,                  // source width
+  player.height,                 // source height
+  player.x,                      // canvas X
+  player.y,                      // canvas Y
+  player.width,                  // draw width
+  player.height                  // draw height
+);
 
-  // Player
-  ctx.fillStyle = "#38bdf8";
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+// BUG SPRITE
+ctx.drawImage(
+  bugImg,
+  bug.x,
+  bug.y,
+  bug.width,
+  bug.height
+);
 
-  // Bug
-  ctx.fillStyle = "#ef4444";
-  ctx.fillRect(bug.x, bug.y, bug.width, bug.height);
 
   // Score
   ctx.fillStyle = "white";
