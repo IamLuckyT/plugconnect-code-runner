@@ -88,38 +88,37 @@ function update() {
   }
 }
 
-// DRAW
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-// PLAYER SPRITE
-ctx.drawImage(
-  playerImg,
-  player.frameX * player.width, // source X
-  0,                             // source Y
-  player.width,                  // source width
-  player.height,                 // source height
-  player.x,                      // canvas X
-  player.y,                      // canvas Y
-  player.width,                  // draw width
-  player.height                  // draw height
-);
 
-// BUG SPRITE
-ctx.drawImage(
-  bugImg,
-  bug.x,
-  bug.y,
-  bug.width,
-  bug.height
-);
-}
+  // PLAYER SPRITE
+  ctx.drawImage(
+    playerImg,
+    player.frameX * player.width, // source X
+    0,                             // source Y
+    player.width,                  // source width
+    player.height,                 // source height
+    player.x,                      // canvas X
+    player.y,                      // canvas Y
+    player.width,                  // draw width
+    player.height                  // draw height
+  );
 
-  // Score
+  // BUG SPRITE
+  ctx.drawImage(
+    bugImg,
+    bug.x,
+    bug.y,
+    bug.width,
+    bug.height
+  );
+
+  // SCORE
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText(`Score: ${score}`, 20, 30);
 
+  // GAME OVER
   if (gameOver) {
     ctx.font = "40px Arial";
     ctx.fillText("Game Over", 350, 200);
@@ -133,4 +132,15 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-loop();
+let assetsLoaded = 0;
+
+playerImg.onload = () => {
+  assetsLoaded++;
+  if (assetsLoaded === 2) loop();
+};
+
+bugImg.onload = () => {
+  assetsLoaded++;
+  if (assetsLoaded === 2) loop();
+};
+
