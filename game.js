@@ -6,11 +6,13 @@ function resizeCanvas() {
   canvas.height = 300;
 }
 
-playerImg.onload = () => {
-  console.log(playerImg.width, playerImg.height);
-};
+let groundY;
 
-const groundY = canvas.height - 80;
+function resizeCanvas() {
+  canvas.width = Math.min(window.innerWidth - 40, 900);
+  canvas.height = 300;
+  groundY = canvas.height - 80;
+}
 
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
@@ -152,15 +154,27 @@ function loop() {
 
 let assetsLoaded = 0;
 
+const playerImg = new Image();
+const bugImg = new Image();
+
+let assetsLoaded = 0;
+
+function startGameIfReady() {
+  assetsLoaded++;
+  if (assetsLoaded === 2) {
+    resizeCanvas();
+    player.y = groundY;
+    bug.y = groundY + 15;
+    loop();
+  }
+}
+
 playerImg.onload = () => {
-  assetsLoaded++;
-  if (assetsLoaded === 2) loop();
+  console.log("Player sprite:", playerImg.width, playerImg.height);
+  startGameIfReady();
 };
+playerImg.src = "assets/player.png";
 
-bugImg.onload = () => {
-  assetsLoaded++;
-  if (assetsLoaded === 2) loop();
-};
+bugImg.onload = startGameIfReady;
+bugImg.src = "assets/bug.png";
 
-ctx.fillStyle = "red";
-ctx.fillRect(player.x, player.y, player.width, player.height);
