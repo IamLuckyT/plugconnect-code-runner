@@ -1,6 +1,14 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+function resizeCanvas() {
+  canvas.width = Math.min(window.innerWidth - 40, 900);
+  canvas.height = 300;
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
 //PLAYER AND BUG IMAGES
 const playerImg = new Image();
 playerImg.src = "assets/player.png";
