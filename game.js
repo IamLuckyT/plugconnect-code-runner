@@ -27,9 +27,9 @@ let gameOver = false;
 // PLAYER
 const player = {
   x: 50,
-  y: 300,
-  width: 64,
-  height: 64,
+  y: groundY,
+  width: 48,
+  height: 48,
 
   frameX: 0,
   maxFrames: 4,
@@ -39,7 +39,6 @@ const player = {
   velocityY: 0,
   jumping: false
 };
-
 
 // BUG (OBSTACLE)
 const bug = {
@@ -75,10 +74,11 @@ function update() {
   player.velocityY += gravity;
   player.y += player.velocityY;
 
-  if (player.y >= 300) {
-    player.y = 300;
-    player.jumping = false;
-  }
+if (player.y >= groundY) {
+  player.y = groundY;
+  player.velocityY = 0;
+  player.jumping = false;
+}
 
   // Bug movement
   bug.x -= gameSpeed;
