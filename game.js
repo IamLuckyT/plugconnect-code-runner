@@ -106,17 +106,21 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 // PLAYER SPRITE
+const FRAME_WIDTH = playerImg.width / player.maxFrames;
+const FRAME_HEIGHT = playerImg.height;
+
 ctx.drawImage(
   playerImg,
-  player.frameX * 48, // source X
-  0,                 // source Y
-  48,                // frame width
-  48,                // frame height
+  player.frameX * FRAME_WIDTH,
+  0,
+  FRAME_WIDTH,
+  FRAME_HEIGHT,
   player.x,
   player.y,
-  64,                // scale UP
-  64
+  FRAME_WIDTH * 2,   // scale up
+  FRAME_HEIGHT * 2
 );
+
 
 // BUG SPRITE
   ctx.drawImage(
