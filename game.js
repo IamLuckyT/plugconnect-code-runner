@@ -6,6 +6,8 @@ function resizeCanvas() {
   canvas.height = 300;
 }
 
+const groundY = canvas.height - 80;
+
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
