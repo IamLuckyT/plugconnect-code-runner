@@ -43,9 +43,9 @@ const player = {
 // BUG (OBSTACLE)
 const bug = {
   x: canvas.width,
-  y: 320,
-  width: 50,
-  height: 40
+  y: groundY + 15,
+  width: 40,
+  height: 30
 };
 
 // INPUT
@@ -82,12 +82,12 @@ if (player.y >= groundY) {
 
   // Bug movement
   bug.x -= gameSpeed;
-  if (bug.x < -bug.width) {
-    bug.x = canvas.width;
-    score++;
-  }
+if (bug.x < -bug.width) {
+  bug.x = canvas.width + Math.random() * 200;
+  score++;
+}
 
-  // Collision detection
+// Collision detection
   if (
     player.x < bug.x + bug.width &&
     player.x + player.width > bug.x &&
@@ -113,7 +113,6 @@ ctx.drawImage(
   64,                // scale UP
   64
 );
-
 
 // BUG SPRITE
   ctx.drawImage(
@@ -155,3 +154,5 @@ bugImg.onload = () => {
   if (assetsLoaded === 2) loop();
 };
 
+ctx.fillStyle = "red";
+ctx.fillRect(player.x, player.y, player.width, player.height);
