@@ -6,6 +6,10 @@ function resizeCanvas() {
   canvas.height = 300;
 }
 
+playerImg.onload = () => {
+  console.log(playerImg.width, playerImg.height);
+};
+
 const groundY = canvas.height - 80;
 
 resizeCanvas();
