@@ -101,20 +101,21 @@ if (player.y >= groundY) {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // PLAYER SPRITE
-  ctx.drawImage(
-    playerImg,
-    player.frameX * player.width, // source X
-    0,                             // source Y
-    player.width,                  // source width
-    player.height,                 // source height
-    player.x,                      // canvas X
-    player.y,                      // canvas Y
-    player.width,                  // draw width
-    player.height                  // draw height
-  );
+// PLAYER SPRITE
+ctx.drawImage(
+  playerImg,
+  player.frameX * 48, // source X
+  0,                 // source Y
+  48,                // frame width
+  48,                // frame height
+  player.x,
+  player.y,
+  64,                // scale UP
+  64
+);
 
-  // BUG SPRITE
+
+// BUG SPRITE
   ctx.drawImage(
     bugImg,
     bug.x,
@@ -123,12 +124,12 @@ function draw() {
     bug.height
   );
 
-  // SCORE
+// SCORE
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText(`Score: ${score}`, 20, 30);
 
-  // GAME OVER
+// GAME OVER
   if (gameOver) {
     ctx.font = "40px Arial";
     ctx.fillText("Game Over", 350, 200);
