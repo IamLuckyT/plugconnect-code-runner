@@ -1,11 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-  canvas.width = Math.min(window.innerWidth - 40, 900);
-  canvas.height = 300;
-}
-
+/* ---------- CANVAS ---------- */
 let groundY;
 
 function resizeCanvas() {
@@ -17,44 +13,42 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-//PLAYER AND BUG IMAGES
+/* ---------- IMAGES ---------- */
 const playerImg = new Image();
-playerImg.src = "assets/player.png";
-
 const bugImg = new Image();
+
+playerImg.src = "assets/player.png";
 bugImg.src = "assets/bug.png";
 
-// GAME STATE
+/* ---------- GAME STATE ---------- */
 let gameSpeed = 4;
 let gravity = 0.5;
 let score = 0;
 let gameOver = false;
 
-// PLAYER
+/* ---------- PLAYER ---------- */
 const player = {
   x: 50,
-  y: groundY,
+  y: 0,
   width: 48,
   height: 48,
-
   frameX: 0,
   maxFrames: 4,
   frameTimer: 0,
   frameInterval: 8,
-
   velocityY: 0,
   jumping: false
 };
 
-// BUG (OBSTACLE)
+/* ---------- BUG ---------- */
 const bug = {
   x: canvas.width,
-  y: groundY + 15,
+  y: 0,
   width: 40,
   height: 30
 };
 
-// INPUT
+/* ---------- INPUT ---------- */
 document.addEventListener("keydown", jump);
 document.addEventListener("touchstart", jump);
 
@@ -65,7 +59,7 @@ function jump() {
   }
 }
 
-// UPDATE
+/* ---------- UPDATE ---------- */
 function update() {
   if (gameOver) return;
 
@@ -76,24 +70,24 @@ function update() {
     player.frameTimer = 0;
   }
 
-  // Player physics
+  // Gravity
   player.velocityY += gravity;
   player.y += player.velocityY;
 
-if (player.y >= groundY) {
-  player.y = groundY;
-  player.velocityY = 0;
-  player.jumping = false;
-}
+  if (player.y >= groundY) {
+    player.y = groundY;
+    player.velocityY = 0;
+    player.jumping = false;
+  }
 
   // Bug movement
   bug.x -= gameSpeed;
-if (bug.x < -bug.width) {
-  bug.x = canvas.width + Math.random() * 200;
-  score++;
-}
+  if (bug.x < -bug.width) {
+    bug.x = canvas.width + Math.random() * 200;
+    score++;
+  }
 
-// Collision detection
+  // Collision
   if (
     player.x < bug.x + bug.width &&
     player.x + player.width > bug.x &&
@@ -104,77 +98,58 @@ if (bug.x < -bug.width) {
   }
 }
 
+/* ---------- DRAW ---------- */
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// PLAYER SPRITE
-const FRAME_WIDTH = playerImg.width / player.maxFrames;
-const FRAME_HEIGHT = playerImg.height;
+  // PLAYER SPRITE
+  const frameWidth = playerImg.width / player.maxFrames;
+  const frameHeight = playerImg.height;
 
-ctx.drawImage(
-  playerImg,
-  player.frameX * FRAME_WIDTH,
-  0,
-  FRAME_WIDTH,
-  FRAME_HEIGHT,
-  player.x,
-  player.y,
-  FRAME_WIDTH * 2,   // scale up
-  FRAME_HEIGHT * 2
-);
-
-
-// BUG SPRITE
   ctx.drawImage(
-    bugImg,
-    bug.x,
-    bug.y,
-    bug.width,
-    bug.height
+    playerImg,
+    player.frameX * frameWidth,
+    0,
+    frameWidth,
+    frameHeight,
+    player.x,
+    player.y,
+    frameWidth * 2,
+    frameHeight * 2
   );
 
-// SCORE
+  // BUG
+  ctx.drawImage(bugImg, bug.x, bug.y, bug.width, bug.height);
+
+  // SCORE
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText(`Score: ${score}`, 20, 30);
 
-// GAME OVER
   if (gameOver) {
     ctx.font = "40px Arial";
-    ctx.fillText("Game Over", 350, 200);
+    ctx.fillText("Game Over", canvas.width / 2 - 100, 150);
   }
 }
 
-// GAME LOOP
+/* ---------- LOOP ---------- */
 function loop() {
   update();
   draw();
   requestAnimationFrame(loop);
 }
 
-let assetsLoaded = 0;
+/* ---------- START AFTER ASSETS LOAD ---------- */
+let loaded = 0;
 
-const playerImg = new Image();
-const bugImg = new Image();
-
-let assetsLoaded = 0;
-
-function startGameIfReady() {
-  assetsLoaded++;
-  if (assetsLoaded === 2) {
-    resizeCanvas();
+function startGame() {
+  loaded++;
+  if (loaded === 2) {
     player.y = groundY;
     bug.y = groundY + 15;
     loop();
   }
 }
 
-playerImg.onload = () => {
-  console.log("Player sprite:", playerImg.width, playerImg.height);
-  startGameIfReady();
-};
-playerImg.src = "assets/player.png";
-
-bugImg.onload = startGameIfReady;
-bugImg.src = "assets/bug.png";
-
+playerImg.onload = startGame;
+bugImg.onload = startGame;
